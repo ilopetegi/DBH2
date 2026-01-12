@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be Going To Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .exercise-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .sentence {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            border-radius: 4px;
+        }
+        input[type="text"] {
+            padding: 5px 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 150px;
+        }
+        input.correct {
+            border-color: #4CAF50;
+            background-color: #e8f5e9;
+        }
+        input.incorrect {
+            border-color: #f44336;
+            background-color: #ffebee;
+        }
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            padding: 12px 30px;
+            margin: 5px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .check-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .check-btn:hover {
+            background-color: #45a049;
+        }
+        .reset-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+        .reset-btn:hover {
+            background-color: #0b7dda;
+        }
+        .score {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="exercise-container">
+        <h1>Be Going To - Fill in the Blanks</h1>
+        <p style="text-align: center; color: #666;">Complete the sentences with the correct form of "be going to"</p>
+        
+        <div id="sentences"></div>
+        
+        <div class="buttons">
+            <button class="check-btn" onclick="checkAnswers()">Check Answers</button>
+            <button class="reset-btn" onclick="resetExercise()">Reset</button>
+        </div>
+        
+        <div class="score" id="score"></div>
+    </div>
+
+    <script>
+        const exercises = [
+            { text: "I ___ visit my grandmother this weekend.", answer: "am going to" },
+            { text: "She ___ study medicine at university.", answer: "is going to" },
+            { text: "They ___ not travel to Japan this year.", answer: "are going to" },
+            { text: "We ___ buy a new car next month.", answer: "are going to" },
+            { text: "He ___ not attend the meeting tomorrow.", answer: "is going to" },
+            { text: "___ you ___ watch the movie tonight?", answer: "Are going to" },
+            { text: "My parents ___ move to a bigger house.", answer: "are going to" },
+            { text: "It ___ rain later, so take an umbrella.", answer: "is going to" },
+            { text: "I ___ not eat fast food anymore.", answer: "am going to" },
+            { text: "___ she ___ join us for dinner?", answer: "Is going to" },
+            { text: "The students ___ take the exam next Friday.", answer: "are going to" },
+            { text: "We ___ not stay at that hotel again.", answer: "are going to" },
+            { text: "What ___ you ___ do after graduation?", answer: "are going to" },
+            { text: "He ___ start his own business soon.", answer: "is going to" },
+            { text: "They ___ not sell their old furniture.", answer: "are going to" },
+            { text: "___ it ___ snow this winter?", answer: "Is going to" },
+            { text: "My sister ___ learn how to drive.", answer: "is going to" },
+            { text: "I ___ not waste any more time.", answer: "am going to" },
+            { text: "Where ___ they ___ spend their vacation?", answer: "are going to" },
+            { text: "The company ___ hire new employees.", answer: "is going to" },
+            { text: "You ___ love this new restaurant!", answer: "are going to" },
+            { text: "We ___ not forget your birthday.", answer: "are going to" },
+            { text: "___ he ___ apply for that job?", answer: "Is going to" },
+            { text: "She ___ become a professional dancer.", answer: "is going to" },
+            { text: "I ___ call you later this evening.", answer: "am going to" },
+            { text: "They ___ not wait for us anymore.", answer: "are going to" },
+            { text: "When ___ you ___ finish this project?", answer: "are going to" },
+            { text: "The teacher ___ explain the lesson again.", answer: "is going to" },
+            { text: "We ___ have a party next Saturday.", answer: "are going to" },
+            { text: "___ your brother ___ help us move?", answer: "Is going to" }
+        ];
+
+        function createExercise() {
+            const container = document.getElementById('sentences');
+            container.innerHTML = '';
+            exercises.forEach((exercise, index) => {
+                const div = document.createElement('div');
+                div.className = 'sentence';
+                div.innerHTML = `${index + 1}. ${exercise.text.replace('___', '<input type="text" id="input-${index}">')}`;
+                container.appendChild(div);
+            });
+        }
+
+        function checkAnswers() {
+            let correct = 0;
+            exercises.forEach((exercise, index) => {
+                const input = document.getElementById(`input-${index}`);
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = exercise.answer.toLowerCase();
+                
+                if (userAnswer === correctAnswer) {
+                    input.className = 'correct';
+                    correct++;
+                } else {
+                    input.className = 'incorrect';
+                }
+            });
+            document.getElementById('score').textContent = `Score: ${correct}/${exercises.length}`;
+        }
+
+        function resetExercise() {
+            exercises.forEach((exercise, index) => {
+                const input = document.getElementById(`input-${index}`);
+                input.value = '';
+                input.className = '';
+            });
+            document.getElementById('score').textContent = '';
+        }
+
+        createExercise();
+    </script>
+</body>
+</html>
