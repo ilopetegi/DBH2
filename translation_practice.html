@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica de Traducción</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .exercise {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .exercise-number {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .exercise-type {
+            background: #764ba2;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+        
+        .spanish-text {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .check-btn {
+            background: #667eea;
+            color: white;
+        }
+        
+        .check-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .show-btn {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .show-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            display: block;
+        }
+        
+        .feedback.shown {
+            background: #d1ecf1;
+            border: 2px solid #17a2b8;
+            color: #0c5460;
+            display: block;
+        }
+        
+        .correct-answer {
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Práctica de Traducción</h1>
+        <p class="subtitle">Español → Inglés | Present Simple & Past Simple</p>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+        
+        <div id="exercises"></div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="correctCount">0</div>
+                <div class="stat-label">Correctas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="incorrectCount">0</div>
+                <div class="stat-label">Incorrectas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="percentageCount">0%</div>
+                <div class="stat-label">Precisión</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const exercises = [
+            {spanish: "Ella come manzanas todos los días", english: "she eats apples every day", type: "Present Simple - Afirmativa"},
+            {spanish: "¿Ellos trabajan aquí?", english: "do they work here", type: "Present Simple - Interrogativa"},
+            {spanish: "Yo no bebo café", english: "i do not drink coffee", type: "Present Simple - Negativa"},
+            {spanish: "¿Él habla español?", english: "does he speak spanish", type: "Present Simple - Interrogativa"},
+            {spanish: "Nosotros estudiamos inglés", english: "we study english", type: "Present Simple - Afirmativa"},
+            {spanish: "Tú no vives en Madrid", english: "you do not live in madrid", type: "Present Simple - Negativa"},
+            {spanish: "¿Ella lee libros?", english: "does she read books", type: "Present Simple - Interrogativa"},
+            {spanish: "Ellos juegan fútbol los sábados", english: "they play football on saturdays", type: "Present Simple - Afirmativa"},
+            {spanish: "Yo no entiendo la pregunta", english: "i do not understand the question", type: "Present Simple - Negativa"},
+            {spanish: "¿Ustedes conocen a María?", english: "do you know maria", type: "Present Simple - Interrogativa"},
+            {spanish: "Él visitó París el año pasado", english: "he visited paris last year", type: "Past Simple - Afirmativa"},
+            {spanish: "Yo no comí ayer", english: "i did not eat yesterday", type: "Past Simple - Negativa"},
+            {spanish: "¿Ellos fueron a la fiesta?", english: "did they go to the party", type: "Past Simple - Interrogativa"},
+            {spanish: "Nosotros estudiamos para el examen", english: "we studied for the exam", type: "Past Simple - Afirmativa"},
+            {spanish: "Ella no vio la película", english: "she did not see the movie", type: "Past Simple - Negativa"},
+            {spanish: "¿Tú compraste el coche?", english: "did you buy the car", type: "Past Simple - Interrogativa"},
+            {spanish: "Yo viajé a Londres en 2020", english: "i travelled to london in 2020", type: "Past Simple - Afirmativa"},
+            {spanish: "Ellos no llegaron a tiempo", english: "they did not arrive on time", type: "Past Simple - Negativa"},
+            {spanish: "¿Él escribió el email?", english: "did he write the email", type: "Past Simple - Interrogativa"},
+            {spanish: "Nosotros no hablamos ayer", english: "we did not speak yesterday", type: "Past Simple - Negativa"}
+        ];
+
+        let correct = 0;
+        let incorrect = 0;
+        let attempted = 0;
+
+        function normalizeText(text) {
+            return text.toLowerCase()
+                .trim()
+                .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()¿?]/g, "")
+                .replace(/\s+/g, " ");
+        }
+
+        function checkAnswer(index) {
+            const input = document.getElementById(`input-${index}`);
+            const feedback = document.getElementById(`feedback-${index}`);
+            const userAnswer = normalizeText(input.value);
+            const correctAnswer = normalizeText(exercises[index].english);
+            
+            if (userAnswer === "") {
+                alert("Por favor, escribe una respuesta antes de verificar.");
+                return;
+            }
+
+            if (userAnswer === correctAnswer) {
+                feedback.className = "feedback correct";
+                feedback.innerHTML = "✅ ¡Excelente! Tu respuesta es correcta.";
+                correct++;
+            } else {
+                feedback.className = "feedback incorrect";
+                feedback.innerHTML = `❌ Incorrecto.<div class="correct-answer">Respuesta correcta: ${exercises[index].english}</div>`;
+                incorrect++;
+            }
+            
+            attempted++;
+            updateStats();
+            input.disabled = true;
+        }
+
+        function showAnswer(index) {
+            const input = document.getElementById(`input-${index}`);
+            const feedback = document.getElementById(`feedback-${index}`);
+            
+            input.value = exercises[index].english;
+            feedback.className = "feedback shown";
+            feedback.innerHTML = `💡 Respuesta mostrada: ${exercises[index].english}`;
+            input.disabled = true;
+        }
+
+        function updateStats() {
+            document.getElementById("correctCount").textContent = correct;
+            document.getElementById("incorrectCount").textContent = incorrect;
+            
+            const percentage = attempted > 0 ? Math.round((correct / attempted) * 100) : 0;
+            document.getElementById("percentageCount").textContent = percentage + "%";
+            
+            const progress = (attempted / exercises.length) * 100;
+            document.getElementById("progressBar").style.width = progress + "%";
+        }
+
+        function renderExercises() {
+            const container = document.getElementById("exercises");
+            
+            exercises.forEach((ex, index) => {
+                const div = document.createElement("div");
+                div.className = "exercise";
+                div.innerHTML = `
+                    <div class="exercise-header">
+                        <span class="exercise-number">${index + 1}</span>
+                        <span class="exercise-type">${ex.type}</span>
+                    </div>
+                    <div class="spanish-text">${ex.spanish}</div>
+                    <input type="text" id="input-${index}" placeholder="Escribe tu traducción en inglés...">
+                    <div class="button-group">
+                        <button class="check-btn" onclick="checkAnswer(${index})">Verificar</button>
+                        <button class="show-btn" onclick="showAnswer(${index})">Ver Respuesta</button>
+                    </div>
+                    <div class="feedback" id="feedback-${index}"></div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        renderExercises();
+    </script>
+</body>
+</html>
