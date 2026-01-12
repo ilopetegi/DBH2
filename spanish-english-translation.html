@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traducciones – Present & Past Simple</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      padding: 40px;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 2.5em;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 30px;
+      background: #e0e0e0;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      width: 0%;
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .question {
+      background: #f8f9fa;
+      border: 2px solid #e0e0e0;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .question:hover {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    
+    .question.correct {
+      background: #d4edda;
+      border-color: #28a745;
+    }
+    
+    .spanish-text {
+      font-size: 1.2em;
+      color: #333;
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      transition: border-color 0.3s ease;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    
+    .check-btn {
+      background: #667eea;
+      color: white;
+    }
+    
+    .check-btn:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .show-btn {
+      background: #ffc107;
+      color: #333;
+    }
+    
+    .show-btn:hover {
+      background: #e0a800;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+    }
+    
+    .reset-btn {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .reset-btn:hover {
+      background: #5a6268;
+    }
+    
+    .feedback {
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 1.1em;
+      display: none;
+    }
+    
+    .feedback.correct {
+      color: #28a745;
+      display: block;
+    }
+    
+    .feedback.incorrect {
+      color: #dc3545;
+      display: block;
+    }
+    
+    .answer {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      border-radius: 4px;
+    }
+    
+    .answer.show {
+      display: block;
+    }
+    
+    .score-display {
+      text-align: center;
+      font-size: 1.5em;
+      color: #667eea;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 1.8em;
+      }
+      
+      .button-group {
+        flex-direction: column;
+      }
+      
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🇬🇧 Traducciones al Inglés</h1>
+  <p class="subtitle">Escribe la traducción correcta en inglés. Puedes comprobar tu respuesta o mostrar la solución.</p>
+  
+  <div class="score-display" id="scoreDisplay">Respuestas correctas: 0 / 20</div>
+  
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill">0%</div>
+  </div>
+  
+  <div id="container"></div>
+</div>
+
+<script>
+const exercises = [
+  {es: "1. Yo tengo un perro.", en: "I have a dog."},
+  {es: "2. Mi hermano vive en Donostia.", en: "My brother lives in Donostia."},
+  {es: "3. Ella va a la escuela todos los días.", en: "She goes to school every day."},
+  {es: "4. Nosotros vemos la televisión por la noche.", en: "We watch TV at night."},
+  {es: "5. Ellos juegan al fútbol los fines de semana.", en: "They play football at weekends."},
+  {es: "6. Mi padre trabaja en una oficina.", en: "My father works in an office."},
+  {es: "7. La chica estudia inglés los lunes.", en: "The girl studies English on Mondays."},
+  {es: "8. El profesor siempre ayuda a los alumnos.", en: "The teacher always helps the students."},
+  {es: "9. Mi amiga nunca llega tarde.", en: "My friend is never late."},
+  {es: "10. El perro duerme en la cocina.", en: "The dog sleeps in the kitchen."},
+  {es: "11. Ayer fui al cine con mis amigos.", en: "Yesterday I went to the cinema with my friends."},
+  {es: "12. El sábado jugué a videojuegos toda la tarde.", en: "On Saturday I played videogames all afternoon."},
+  {es: "13. Mi hermana hizo una tarta para mi cumpleaños.", en: "My sister made a cake for my birthday."},
+  {es: "14. El fin de semana pasado vimos una película de terror.", en: "Last weekend we watched a horror movie."},
+  {es: "15. El año pasado viajamos a Francia.", en: "Last year we travelled to France."},
+  {es: "16. Ella no tuvo tiempo para hacer la tarea.", en: "She didn't have time to do the homework."},
+  {es: "17. Ellos no fueron a la fiesta porque estaban cansados.", en: "They didn't go to the party because they were tired."},
+  {es: "18. Yo comí en un restaurante nuevo y me gustó mucho.", en: "I ate in a new restaurant and I liked it a lot."},
+  {es: "19. Mi abuelo me contó una historia muy interesante.", en: "My grandfather told me a very interesting story."},
+  {es: "20. El partido empezó tarde, pero terminó muy bien.", en: "The match started late, but it ended very well."}
+];
+
+const container = document.getElementById("container");
+let correctAnswers = 0;
+
+exercises.forEach((item, index) => {
+  const div = document.createElement("div");
+  div.className = "question";
+  div.id = `question-${index}`;
+
+  div.innerHTML = `
+    <div class="spanish-text">${item.es}</div>
+    <input type="text" id="input-${index}" placeholder="Escribe tu respuesta aquí...">
+    <div class="button-group">
+      <button class="check-btn" onclick="check(${index})">✓ Check</button>
+      <button class="show-btn" onclick="showAnswer(${index})">👁 Show answer</button>
+      <button class="reset-btn" onclick="resetQuestion(${index})">↻ Reset</button>
+    </div>
+    <div id="feedback-${index}" class="feedback"></div>
+    <div id="answer-${index}" class="answer"><b>Respuesta correcta:</b> ${item.en}</div>
+  `;
+
+  container.appendChild(div);
+});
+
+function updateScore() {
+  document.getElementById("scoreDisplay").textContent = `Respuestas correctas: ${correctAnswers} / 20`;
+  const percentage = (correctAnswers / 20) * 100;
+  const progressFill = document.getElementById("progressFill");
+  progressFill.style.width = percentage + "%";
+  progressFill.textContent = Math.round(percentage) + "%";
+}
+
+window.check = function(i) {
+  const userInput = document.getElementById("input-" + i).value.trim().toLowerCase();
+  const correct = exercises[i].en.toLowerCase();
+  const feedback = document.getElementById("feedback-" + i);
+  const questionDiv = document.getElementById("question-" + i);
+
+  if (userInput === correct) {
+    feedback.textContent = "✓ ¡Correcto! Excelente trabajo.";
+    feedback.className = "feedback correct";
+    questionDiv.classList.add("correct");
+    
+    if (!questionDiv.dataset.counted) {
+      correctAnswers++;
+      questionDiv.dataset.counted = "true";
+      updateScore();
+    }
+  } else {
+    feedback.textContent = "✗ Incorrecto. Inténtalo de nuevo o muestra la respuesta.";
+    feedback.className = "feedback incorrect";
+  }
+};
+
+window.showAnswer = function(i) {
+  const answerDiv = document.getElementById("answer-" + i);
+  answerDiv.classList.add("show");
+};
+
+window.resetQuestion = function(i) {
+  const input = document.getElementById("input-" + i);
+  const feedback = document.getElementById("feedback-" + i);
+  const answerDiv = document.getElementById("answer-" + i);
+  const questionDiv = document.getElementById("question-" + i);
+  
+  input.value = "";
+  feedback.textContent = "";
+  feedback.className = "feedback";
+  answerDiv.classList.remove("show");
+  
+  if (questionDiv.dataset.counted) {
+    correctAnswers--;
+    delete questionDiv.dataset.counted;
+    questionDiv.classList.remove("correct");
+    updateScore();
+  }
+};
+
+updateScore();
+</script>
+
+</body>
+</html>
