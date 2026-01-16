@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be Going To vs Will - Predictions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .instructions {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+        }
+
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .instructions p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .progress {
+            background: #e0e0e0;
+            height: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        
+
+        .exercise {
+            background: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .exercise.correct {
+            border-color: #4caf50;
+            background: #f1f8f4;
+        }
+
+        .exercise.incorrect {
+            border-color: #f44336;
+            background: #fef1f0;
+        }
+
+        .question {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .option {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1em;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #4caf50;
+            color: white;
+        }
+
+        .feedback.incorrect {
+            background: #f44336;
+            color: white;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.3em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .reset-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔮 Predictions: Be Going To vs Will</h1>
+        
+        <div class="instructions">
+            <h3>Instructions</h3>
+            <p>Choose the correct form (<strong>be going to</strong> or <strong>will</strong>) for each prediction. Remember: use "be going to" for predictions based on present evidence, and "will" for predictions based on opinion or belief.</p>
+        </div>
+
+        <div class="score">Score: <span id="score">0</span>/50</div>
+        
+        <div class="progress">
+            <div class="progress-bar" id="progressBar">0%</div>
+        </div>
+        
+        <div id="exercises"></div>
+        
+        <button class="reset-btn" onclick="resetQuiz()">Reset Quiz</button>
+    </div>
+
+    <script>
+        const exercises = [
+            {q: "Look at those dark clouds! It ___ rain.", options: ["will", "is going to"], answer: "is going to", explanation: "We can see dark clouds (present evidence)."},
+            {q: "I think robots ___ do most of our jobs in the future.", options: ["will", "are going to"], answer: "will", explanation: "This is a prediction based on opinion, not present evidence."},
+            {q: "Be careful! You ___ fall!", options: ["will", "are going to"], answer: "are going to", explanation: "There's present evidence that someone is about to fall."},
+            {q: "Scientists believe humans ___ live on Mars one day.", options: ["will", "are going to"], answer: "will", explanation: "This is a prediction based on belief."},
+            {q: "She's studied so hard. She ___ pass the exam.", options: ["will", "is going to"], answer: "is going to", explanation: "Her studying is present evidence for the prediction."},
+            {q: "I don't think it ___ snow tomorrow.", options: ["will", "is going to"], answer: "will", explanation: "This is a prediction based on personal opinion."},
+            {q: "Watch out! That vase ___ break!", options: ["will", "is going to"], answer: "is going to", explanation: "There's immediate evidence that it's about to break."},
+            {q: "Maybe technology ___ solve climate change.", options: ["will", "is going to"], answer: "will", explanation: "This is a speculation or possibility, not based on present evidence."},
+            {q: "The train is late. We ___ miss our connection.", options: ["will", "are going to"], answer: "are going to", explanation: "The late train is present evidence."},
+            {q: "I'm sure you ___ love this movie!", options: ["will", "are going to"], answer: "will", explanation: "This is a prediction based on the speaker's belief."},
+            {q: "Look at the time! We ___ be late!", options: ["will", "are going to"], answer: "are going to", explanation: "The time is present evidence."},
+            {q: "Experts predict that AI ___ change everything.", options: ["will", "is going to"], answer: "will", explanation: "This is an expert prediction/opinion about the future."},
+            {q: "The economy is struggling. There ___ be job losses.", options: ["will", "is going to"], answer: "is going to", explanation: "The struggling economy is present evidence."},
+            {q: "Don't worry. Everything ___ be fine.", options: ["will", "is going to"], answer: "will", explanation: "This is reassurance based on belief, not evidence."},
+            {q: "She's pregnant. She ___ have a baby in June.", options: ["will", "is going to"], answer: "is going to", explanation: "Her pregnancy is present evidence."},
+            {q: "Probably we ___ travel to space for holidays someday.", options: ["will", "are going to"], answer: "will", explanation: "This is speculation about a distant future possibility."},
+            {q: "He's driving too fast. He ___ crash!", options: ["will", "is going to"], answer: "is going to", explanation: "His fast driving is present evidence of danger."},
+            {q: "I believe electric cars ___ replace gas cars.", options: ["will", "are going to"], answer: "will", explanation: "This is a belief about the future."},
+            {q: "The temperature is dropping. It ___ freeze tonight.", options: ["will", "is going to"], answer: "is going to", explanation: "The dropping temperature is present evidence."},
+            {q: "Perhaps humans ___ discover alien life someday.", options: ["will", "are going to"], answer: "will", explanation: "This is speculation without present evidence."},
+            {q: "Look at her expression. She ___ say no.", options: ["will", "is going to"], answer: "is going to", explanation: "Her expression is present evidence of her intention."},
+            {q: "Futurists think virtual reality ___ dominate entertainment.", options: ["will", "is going to"], answer: "will", explanation: "This is a prediction based on expert opinion."},
+            {q: "The company is losing money. It ___ close down.", options: ["will", "is going to"], answer: "is going to", explanation: "Financial losses are present evidence."},
+            {q: "I hope my team ___ win the championship.", options: ["will", "is going to"], answer: "will", explanation: "This is a hope/wish, not based on present evidence."},
+            {q: "They're arguing loudly. They ___ break up.", options: ["will", "are going to"], answer: "are going to", explanation: "The argument is present evidence."},
+            {q: "Someday people ___ cure all diseases.", options: ["will", "are going to"], answer: "will", explanation: "This is a general prediction about the distant future."},
+            {q: "He's coughing a lot. He ___ get sick.", options: ["will", "is going to"], answer: "is going to", explanation: "The coughing is present evidence."},
+            {q: "I think the next generation ___ live longer.", options: ["will", "is going to"], answer: "will", explanation: "This is an opinion-based prediction."},
+            {q: "The plant is dying. It ___ need water soon.", options: ["will", "is going to"], answer: "is going to", explanation: "The dying plant is present evidence."},
+            {q: "Probably tomorrow ___ be sunny.", options: ["will", "is going to"], answer: "will", explanation: "This is a guess without present evidence."},
+            {q: "Watch your step! You ___ trip!", options: ["will", "are going to"], answer: "are going to", explanation: "There's immediate danger visible."},
+            {q: "I'm confident renewable energy ___ become cheaper.", options: ["will", "is going to"], answer: "will", explanation: "This is a confidence-based prediction."},
+            {q: "The battery is at 1%. Your phone ___ die.", options: ["will", "is going to"], answer: "is going to", explanation: "The battery level is present evidence."},
+            {q: "Maybe one day we ___ understand the universe completely.", options: ["will", "are going to"], answer: "will", explanation: "This is speculation about a distant possibility."},
+            {q: "She's yawning constantly. She ___ fall asleep soon.", options: ["will", "is going to"], answer: "is going to", explanation: "The yawning is present evidence."},
+            {q: "Astronomers believe we ___ find another Earth-like planet.", options: ["will", "are going to"], answer: "will", explanation: "This is a belief-based prediction."},
+            {q: "The ice is cracking. You ___ fall through!", options: ["will", "are going to"], answer: "are going to", explanation: "The cracking ice is present evidence of danger."},
+            {q: "I doubt it ___ make any difference.", options: ["will", "is going to"], answer: "will", explanation: "This is a doubt/opinion about the future."},
+            {q: "Traffic is terrible. We ___ arrive late.", options: ["will", "are going to"], answer: "are going to", explanation: "The traffic is present evidence."},
+            {q: "Eventually, science ___ answer all our questions.", options: ["will", "is going to"], answer: "will", explanation: "This is a general prediction about the distant future."},
+            {q: "He's turning red. He ___ explode with anger!", options: ["will", "is going to"], answer: "is going to", explanation: "His red face is present evidence."},
+            {q: "I suppose children ___ be smarter in the future.", options: ["will", "are going to"], answer: "will", explanation: "This is a supposition/opinion."},
+            {q: "The rope is fraying. It ___ snap!", options: ["will", "is going to"], answer: "is going to", explanation: "The fraying rope is present evidence."},
+            {q: "Probably genetic engineering ___ extend human lifespans.", options: ["will", "is going to"], answer: "will", explanation: "This is a probability prediction without present evidence."},
+            {q: "Look at those storm clouds approaching. It ___ pour soon.", options: ["will", "is going to"], answer: "is going to", explanation: "The approaching clouds are present evidence."},
+            {q: "I expect drones ___ deliver most packages eventually.", options: ["will", "are going to"], answer: "will", explanation: "This is an expectation about the future."},
+            {q: "She's practiced for months. She ___ perform beautifully.", options: ["will", "is going to"], answer: "is going to", explanation: "Her practice is present evidence."},
+            {q: "Scientists predict temperatures ___ rise significantly.", options: ["will", "are going to"], answer: "will", explanation: "This is a scientific prediction/opinion."},
+            {q: "The building is shaking. It ___ collapse!", options: ["will", "is going to"], answer: "is going to", explanation: "The shaking is present evidence of danger."},
+            {q: "One day humanity ___ colonize other planets.", options: ["will", "is going to"], answer: "will", explanation: "This is a general prediction about the distant future."}
+        ];
+
+        let score = 0;
+        let answered = 0;
+
+        function createExercises() {
+            const container = document.getElementById('exercises');
+            exercises.forEach((ex, index) => {
+                const div = document.createElement('div');
+                div.className = 'exercise';
+                div.innerHTML = `
+                    <div class="question">${index + 1}. ${ex.q}</div>
+                    <div class="options">
+                        ${ex.options.map(opt => `<button class="option" onclick="checkAnswer(${index}, '${opt}')">${opt}</button>`).join('')}
+                    </div>
+                    <div class="feedback" id="feedback${index}"></div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function checkAnswer(index, selected) {
+            const exercise = exercises[index];
+            const exerciseDiv = document.querySelectorAll('.exercise')[index];
+            const feedback = document.getElementById(`feedback${index}`);
+            const options = exerciseDiv.querySelectorAll('.option');
+
+            if (exerciseDiv.classList.contains('correct') || exerciseDiv.classList.contains('incorrect')) {
+                return;
+            }
+
+            answered++;
+            options.forEach(opt => opt.classList.add('disabled'));
+
+            if (opt.textContent === selected) {
+                opt.classList.add('selected');
+            }
+
+            if (selected === exercise.answer) {
+                score++;
+                exerciseDiv.classList.add('correct');
+                feedback.className = 'feedback show correct';
+                feedback.textContent = `✓ Correct! ${exercise.explanation}`;
+            } else {
+                exerciseDiv.classList.add('incorrect');
+                feedback.className = 'feedback show incorrect';
+                feedback.textContent = `✗ Incorrect. The answer is "${exercise.answer}". ${exercise.explanation}`;
+            }
+
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            const percentage = (answered / exercises.length) * 100;
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = Math.round(percentage) + '%';
+        }
+
+        function resetQuiz() {
+            score = 0;
+            answered = 0;
+            document.getElementById('exercises').innerHTML = '';
+            createExercises();
+            updateScore();
+        }
+
+        createExercises();
+    </script>
+</body>
+</html>
